@@ -87,7 +87,8 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
           pendingTasks = List.from(pendingTasks)
             ..remove(event.task)
             ..insert(taskIndex, event.task.copyWith(isFavorite: true));
-          favoriteTasks.insert(0, event.task.copyWith(isFavorite: true));
+          favoriteTasks = List.from(favoriteTasks)..insert(0, event.task.copyWith(isFavorite: true));
+          //favoriteTasks.insert(0, event.task.copyWith(isFavorite: true));
         } else {
           var taskIndex = pendingTasks.indexOf(event.task);
           pendingTasks = List.from(pendingTasks)
@@ -169,7 +170,6 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     );
   }
 
-  
   @override
   TasksState? fromJson(Map<String, dynamic> json) {
     return TasksState.fromMap(json);
