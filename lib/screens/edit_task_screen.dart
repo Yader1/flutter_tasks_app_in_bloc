@@ -4,20 +4,23 @@ import 'package:flutter_tasks_app/services/guid_gen.dart';
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
 
-class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({
-    Key? key,
+class EditTaskScreen extends StatelessWidget {
+  final Task oldTask;
+  
+  const EditTaskScreen({
+    Key? key, 
+    required this.oldTask,
   }) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController titleController = TextEditingController();
-    TextEditingController descriptionController = TextEditingController();
+    TextEditingController titleController = TextEditingController(text: oldTask.title);
+    TextEditingController descriptionController = TextEditingController(text: oldTask.description);
     return Container(
       padding: const EdgeInsets.all(20.0),
       child: Column(children: [
-        const Text("Add Task", style: TextStyle(fontSize: 24.0)),
+        const Text("Edit Task", style: TextStyle(fontSize: 24.0)),
         const SizedBox(height: 10.0),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -45,16 +48,18 @@ class AddTaskScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: (){
-                var task = Task(
+                var editTask = Task(
                   title: titleController.text, 
                   description: descriptionController.text, 
-                  id: GUIDGen.generate(),
+                  id: oldTask.id,
+                  isFavorite: oldTask.isFavorite,
+                  isDone: false,
                   date: DateTime.now().toString()
                 );
-                context.read<TasksBloc>().add(AddTask(task: task));
+                context.read<TasksBloc>().add(EditTask(oldTask: oldTask, newTask: editTask));
                 Navigator.pop(context);
               },
-              child: const Text("Add")
+              child: const Text("Save")
             ),
             TextButton(
               onPressed: () => Navigator.pop(context), 

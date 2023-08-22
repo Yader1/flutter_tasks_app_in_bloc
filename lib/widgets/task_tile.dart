@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tasks_app/screens/edit_task_screen.dart';
 import 'package:intl/intl.dart';
 
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
+import 'popup_menu.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({
@@ -18,6 +20,19 @@ class TaskTile extends StatelessWidget {
       :ctx.read<TasksBloc>().add(RemoveTask(task: task));
   }
 
+  void _editTask(BuildContext context){
+    showModalBottomSheet(
+      context: context, 
+      isScrollControlled: true,
+      builder: (context) => SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: EditTaskScreen(oldTask: task),
+        ),
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,7 +43,7 @@ class TaskTile extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                const Icon(Icons.star_outline),
+                task.isFavorite == false ? const Icon(Icons.star_outline) : const Icon(Icons.star),
                 const SizedBox(width: 10.0),
                 Expanded(
                   child: Column(
@@ -39,7 +54,7 @@ class TaskTile extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 18.0, decoration: task.isDone! ? TextDecoration.lineThrough : null)
                       ),
-                      Text(DateFormat().add_yMEd().add_Hms().format(DateTime.now())),
+                      Text(DateFormat().add_yMEd().add_Hms().format(DateTime.parse(task.date))),
                     ],
                   ),
                 ),
@@ -54,23 +69,16 @@ class TaskTile extends StatelessWidget {
                   context.read<TasksBloc>().add(UpdateTask(task: task));
                 } : null,
               ),
-              PopupMenuButton(itemBuilder: ((context)=>[
-                PopupMenuItem(child: TextButton.icon(
-                  onPressed: null,
-                  icon: const Icon(Icons.edit),
-                  label: const Text('Edit'),
-                ), onTap: (){}),
-                PopupMenuItem(child: TextButton.icon(
-                  onPressed: null,
-                  icon: const Icon(Icons.bookmark),
-                  label: const Text('Add to Booknarks'),
-                ), onTap: (){}),
-                PopupMenuItem(child: TextButton.icon(
-                  onPressed: null,
-                  icon: const Icon(Icons.delete),
-                  label: const Text('Delete'),
-                ), onTap: () => _removeOrDeleteTask(context, task))
-              ]))
+              PopuMenu(
+                task: task, 
+                cancelOrDeleteCallback: () => _removeOrDeleteTask(context, task),
+                likeOrDislikeCallback: () => context.read<TasksBloc>().add(MarkFavoriteOrUnfavoriteTask(task: task)),
+                editTaskCallback: (){
+                  Navigator.of(context).pop();
+                  _editTask(context);
+                },
+                restoreTaskCallback: () => context.read<TasksBloc>().add(RestoreTask(task: task)),
+              )
             ],
           ),
         ]
@@ -78,19 +86,3 @@ class TaskTile extends StatelessWidget {
     );
   }
 }
-
-/*
-ListTile(
-      title: Text(task.title, overflow: TextOverflow.ellipsis, style: TextStyle(
-        decoration: task.isDone! ? TextDecoration.lineThrough : null
-      )),
-      trailing: Checkbox(
-        value: task.isDone,
-        onChanged: task.isDeleted == false ? (value){
-          context.read<TasksBloc>().add(UpdateTask(task: task));
-        } : null,
-      ),
-      onLongPress: () => _removeOrDeleteTask(context, task),
-
-    );
-*/
