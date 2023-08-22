@@ -72,6 +72,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   password: _passwordController.text
                 ).then((value){
                   Navigator.pushReplacementNamed(context, LoginScreen.id);
+                }).onError((error, stackTrace){
+                    var snackBar = const SnackBar(
+                      content: Text(
+                        'There is an Error',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.red,
+                      duration: Duration(milliseconds: 1000),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 });
               },
               child: const Text('Register'),
