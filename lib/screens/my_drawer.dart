@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tasks_app/screens/login_screen.dart';
+import 'package:get_storage/get_storage.dart';
 import 'recycle_bin.dart';
 import 'tabs_screen.dart';
 
@@ -53,6 +55,14 @@ class MyDrawer extends StatelessWidget {
               },
             ),
             const Divider(),
+            ListTile(
+              onTap: (){
+                GetStorage().remove('token');
+                Navigator.pushReplacementNamed(context, LoginScreen.id);
+              },
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+            ),
             BlocBuilder<SwitchBloc, SwitchState>(
               builder: (context, state) {
                 return Switch(

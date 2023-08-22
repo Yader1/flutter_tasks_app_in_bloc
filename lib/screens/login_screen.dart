@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_tasks_app/screens/tabs_screen.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     email: _emailController.text, 
                     password: _passwordController.text
                   ).then((value){
+                    GetStorage().write('token', value.user!.uid);
                     Navigator.pushReplacementNamed(context, TabsScreen.id);
                   }).onError((error, stackTrace){
                     var snackBar = const SnackBar(
