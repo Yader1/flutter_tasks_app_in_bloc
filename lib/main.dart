@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';
 import 'blocs/bloc_exports.dart';
+import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
 import 'screens/tabs_screen.dart';
 import 'services/app_router.dart';
 import 'services/app_theme.dart';
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
             theme: state.switchValue
                 ? AppThemes.appThemeData[AppTheme.darkTheme]
                 : AppThemes.appThemeData[AppTheme.lightTheme],
-            home: const TabsScreen(),
+            home: const LoginScreen(),
             onGenerateRoute: appRouter.onGenerateRoute,
           );
         },

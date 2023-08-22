@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tasks_app/screens/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -14,6 +16,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
@@ -63,6 +67,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ElevatedButton(
               onPressed: () {
                 final isValid = _formKey.currentState!.validate();
+                _auth.createUserWithEmailAndPassword(
+                  email: _emailController.text, 
+                  password: _passwordController.text
+                ).then((value){
+                  Navigator.pushReplacementNamed(context, LoginScreen.id);
+                });
               },
               child: const Text('Register'),
             ),

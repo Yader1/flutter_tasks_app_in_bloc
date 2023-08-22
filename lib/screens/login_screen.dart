@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_tasks_app/screens/tabs_screen.dart';
+
 import '../screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/forgot_password_screen.dart';
@@ -14,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
@@ -65,6 +69,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ElevatedButton(
                 onPressed: () {
                   final isValid = _formKey.currentState!.validate();
+                  _auth.signInWithEmailAndPassword(
+                    email: _emailController.text, 
+                    password: _passwordController.text
+                  ).then((value){
+                    Navigator.pushReplacementNamed(context, TabsScreen.id);
+                  });
                 },
                 child: const Text('Login'),
               ),
