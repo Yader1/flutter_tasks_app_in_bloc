@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tasks_app/screens/login_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -12,6 +14,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  
   @override
   void dispose() {
     _emailController.dispose();
@@ -52,6 +56,28 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     maximumSize: const Size(200, 40)),
                 onPressed: () async {
                   _formKey.currentState!.validate();
+                  await _auth.sendPasswordResetEmail(email: _emailController.text.trim()).then((value){
+                    Navigator.of(context).pushReplacementNamed(LoginScreen.id);
+                    var snackBar = const SnackBar(
+                      content: Text(
+                        'Check your email',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.green,
+                      duration: Duration(milliseconds: 2000),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }).onError((error, stackTrace){
+                    var snackBar = const SnackBar(
+                      content: Text(
+                        'There is an Error',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      backgroundColor: Colors.green,
+                      duration: Duration(milliseconds: 2000),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  });
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
