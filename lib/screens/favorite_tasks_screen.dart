@@ -6,7 +6,6 @@ import '../widgets/tasks_list.dart';
 
 class FavoriteTasksScreen extends StatelessWidget {
   const FavoriteTasksScreen({Key? key}) : super(key: key);
-
   static const id = 'tasks_screen';
 
   @override

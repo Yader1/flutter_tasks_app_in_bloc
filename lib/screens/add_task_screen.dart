@@ -1,64 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tasks_app/services/guid_gen.dart';
 
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
+import '../services/guid_gen.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({
-    Key? key,
-  }) : super(key: key);
-
+  const AddTaskScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     TextEditingController titleController = TextEditingController();
     TextEditingController descriptionController = TextEditingController();
     return Container(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20),
       child: Column(children: [
-        const Text("Add Task", style: TextStyle(fontSize: 24.0)),
-        const SizedBox(height: 10.0),
+        const Text(
+          'Add Task',
+          style: TextStyle(fontSize: 24),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
         Padding(
-          padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
           child: TextField(
             autofocus: true,
-            decoration: const InputDecoration(
-              label: Text("Title"),
-              border: OutlineInputBorder()
-            ),
             controller: titleController,
+            decoration: const InputDecoration(
+              label: Text('Title'),
+              border: OutlineInputBorder(),
+            ),
           ),
         ),
         TextField(
           autofocus: true,
+          controller: descriptionController,
           minLines: 3,
           maxLines: 5,
           decoration: const InputDecoration(
-            label: Text("Description"),
-            border: OutlineInputBorder()
+            label: Text('Description'),
+            border: OutlineInputBorder(),
           ),
-          controller: descriptionController,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('cancel'),
+            ),
             ElevatedButton(
-              onPressed: (){
+              onPressed: () {
                 var task = Task(
-                  title: titleController.text, 
-                  description: descriptionController.text, 
+                  title: titleController.text,
+                  description: descriptionController.text,
                   id: GUIDGen.generate(),
-                  date: DateTime.now().toString()
+                  date: DateTime.now().toString(),
                 );
                 context.read<TasksBloc>().add(AddTask(task: task));
                 Navigator.pop(context);
               },
-              child: const Text("Add")
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context), 
-              child: const Text("Cancelar"),
+              child: const Text('Add'),
             ),
           ],
         ),

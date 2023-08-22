@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tasks_app/screens/edit_task_screen.dart';
+import '../screens/edit_task_screen.dart';
+import 'popup_menu.dart';
 import 'package:intl/intl.dart';
 
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
-import 'popup_menu.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({
@@ -14,23 +14,26 @@ class TaskTile extends StatelessWidget {
 
   final Task task;
 
-  void _removeOrDeleteTask(BuildContext ctx, Task task){
-    task.isDeleted! 
-      ?ctx.read<TasksBloc>().add(DeleteTask(task: task))
-      :ctx.read<TasksBloc>().add(RemoveTask(task: task));
+  void _removeOrDeleteTask(BuildContext ctx, Task task) {
+    task.isDeleted!
+        ? ctx.read<TasksBloc>().add(DeleteTask(task: task))
+        : ctx.read<TasksBloc>().add(RemoveTask(task: task));
   }
 
-  void _editTask(BuildContext context){
+  void _editTask(BuildContext context) {
     showModalBottomSheet(
-      context: context, 
-      isScrollControlled: true,
-      builder: (context) => SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: EditTaskScreen(oldTask: task),
-        ),
-      )
-    );
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: EditTaskScreen(
+                  oldTask: task,
+                ),
+              ),
+            ));
   }
 
   @override
@@ -43,8 +46,12 @@ class TaskTile extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                task.isFavorite == false ? const Icon(Icons.star_outline) : const Icon(Icons.star),
-                const SizedBox(width: 10.0),
+                task.isFavorite == false
+                    ? const Icon(Icons.star_outline)
+                    : const Icon(Icons.star),
+                const SizedBox(
+                  width: 10,
+                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,9 +59,18 @@ class TaskTile extends StatelessWidget {
                       Text(
                         task.title,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 18.0, decoration: task.isDone! ? TextDecoration.lineThrough : null)
+                        style: TextStyle(
+                          fontSize: 18,
+                          decoration:
+                              task.isDone! ? TextDecoration.lineThrough : null,
+                        ),
                       ),
-                      Text(DateFormat().add_yMEd().add_Hms().format(DateTime.parse(task.date))),
+                      Text(
+                        DateFormat()
+                            .add_yMMMd()
+                            .add_Hms()
+                            .format(DateTime.parse(task.date)),
+                      ),
                     ],
                   ),
                 ),
@@ -65,24 +81,52 @@ class TaskTile extends StatelessWidget {
             children: [
               Checkbox(
                 value: task.isDone,
-                onChanged: task.isDeleted == false ? (value){
-                  context.read<TasksBloc>().add(UpdateTask(task: task));
-                } : null,
+                onChanged: task.isDeleted == false
+                    ? (value) {
+                        context.read<TasksBloc>().add(UpdateTask(task: task));
+                      }
+                    : null,
               ),
-              PopuMenu(
-                task: task, 
-                cancelOrDeleteCallback: () => _removeOrDeleteTask(context, task),
-                likeOrDislikeCallback: () => context.read<TasksBloc>().add(MarkFavoriteOrUnfavoriteTask(task: task)),
-                editTaskCallback: (){
+              PopupMenu(
+                task: task,
+                cancelOrDeleteCallback: () =>
+                    _removeOrDeleteTask(context, task),
+                likeOrDislikeCallback: () => context.read<TasksBloc>().add(
+                      MarkFavoriteOrUnfavoriteTask(task: task),
+                    ),
+                editTaskCallback: () {
                   Navigator.of(context).pop();
                   _editTask(context);
                 },
-                restoreTaskCallback: () => context.read<TasksBloc>().add(RestoreTask(task: task)),
-              )
+                restoreTaskCallback: () =>
+                    context.read<TasksBloc>().add(RestoreTask(task: task)),
+              ),
             ],
           ),
-        ]
+        ],
       ),
     );
   }
 }
+
+
+
+
+// ListTile(
+//       title: Text(
+//         task.title,
+//         overflow: TextOverflow.ellipsis,
+//         style: TextStyle(
+//           decoration: task.isDone! ? TextDecoration.lineThrough : null,
+//         ),
+//       ),
+//       trailing: Checkbox(
+//         value: task.isDone,
+//         onChanged: task.isDeleted == false
+//             ? (value) {
+//                 context.read<TasksBloc>().add(UpdateTask(task: task));
+//               }
+//             : null,
+//       ),
+//       onLongPress: () => _removeOrDeleteTask(context, task),
+//     );

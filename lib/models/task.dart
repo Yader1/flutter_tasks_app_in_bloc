@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable
-class Task extends Equatable{
+class Task extends Equatable {
   final String title;
   final String description;
   final String id;
@@ -17,8 +17,8 @@ class Task extends Equatable{
     required this.date,
     this.isDone,
     this.isDeleted,
-    this.isFavorite
-  }){
+    this.isFavorite,
+  }) {
     isDone = isDone ?? false;
     isDeleted = isDeleted ?? false;
     isFavorite = isFavorite ?? false;
@@ -31,7 +31,7 @@ class Task extends Equatable{
     String? date,
     bool? isDone,
     bool? isDeleted,
-    bool? isFavorite
+    bool? isFavorite,
   }) {
     return Task(
       title: title ?? this.title,
@@ -40,19 +40,19 @@ class Task extends Equatable{
       date: date ?? this.date,
       isDone: isDone ?? this.isDone,
       isDeleted: isDeleted ?? this.isDeleted,
-      isFavorite: isFavorite ?? this.isFavorite
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'title': title,
       'description': description,
       'id': id,
       'date': date,
       'isDone': isDone,
       'isDeleted': isDeleted,
-      'isFavorite': isFavorite
+      'isFavorite': isFavorite,
     };
   }
 
@@ -62,20 +62,20 @@ class Task extends Equatable{
       description: map['description'] ?? '',
       id: map['id'] ?? '',
       date: map['date'] ?? '',
-      isDone: map['isDone'] != null ? map['isDone'] as bool : null,
-      isDeleted: map['isDeleted'] != null ? map['isDeleted'] as bool : null,
-      isFavorite: map['isFavorite'] != null ? map['isFavorite'] as bool : null,
+      isDone: map['isDone'],
+      isDeleted: map['isDeleted'],
+      isFavorite: map['isFavorite'],
     );
   }
-  
+
   @override
   List<Object?> get props => [
-    title,
-    description,
-    id,
-    date,
-    isDone,
-    isDeleted,
-    isFavorite
-  ];
+        title,
+        description,
+        id,
+        date,
+        isDone,
+        isDeleted,
+        isFavorite,
+      ];
 }

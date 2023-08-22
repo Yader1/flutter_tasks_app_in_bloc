@@ -6,7 +6,6 @@ import '../widgets/tasks_list.dart';
 
 class PendingTasksScreen extends StatelessWidget {
   const PendingTasksScreen({Key? key}) : super(key: key);
-
   static const id = 'tasks_screen';
 
   @override

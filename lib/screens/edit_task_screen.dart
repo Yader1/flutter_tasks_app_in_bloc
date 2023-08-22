@@ -1,69 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tasks_app/services/guid_gen.dart';
 
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
 
 class EditTaskScreen extends StatelessWidget {
   final Task oldTask;
-  
   const EditTaskScreen({
-    Key? key, 
+    Key? key,
     required this.oldTask,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    TextEditingController titleController = TextEditingController(text: oldTask.title);
-    TextEditingController descriptionController = TextEditingController(text: oldTask.description);
+    TextEditingController titleController =
+        TextEditingController(text: oldTask.title);
+    TextEditingController descriptionController =
+        TextEditingController(text: oldTask.description);
     return Container(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20),
       child: Column(children: [
-        const Text("Edit Task", style: TextStyle(fontSize: 24.0)),
-        const SizedBox(height: 10.0),
+        const Text(
+          'Edit Task',
+          style: TextStyle(fontSize: 24),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
         Padding(
-          padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
           child: TextField(
             autofocus: true,
-            decoration: const InputDecoration(
-              label: Text("Title"),
-              border: OutlineInputBorder()
-            ),
             controller: titleController,
+            decoration: const InputDecoration(
+              label: Text('Title'),
+              border: OutlineInputBorder(),
+            ),
           ),
         ),
         TextField(
           autofocus: true,
+          controller: descriptionController,
           minLines: 3,
           maxLines: 5,
           decoration: const InputDecoration(
-            label: Text("Description"),
-            border: OutlineInputBorder()
+            label: Text('Description'),
+            border: OutlineInputBorder(),
           ),
-          controller: descriptionController,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('cancel'),
+            ),
             ElevatedButton(
-              onPressed: (){
-                var editTask = Task(
-                  title: titleController.text, 
-                  description: descriptionController.text, 
+              onPressed: () {
+                var editedTask = Task(
+                  title: titleController.text,
+                  description: descriptionController.text,
                   id: oldTask.id,
-                  isFavorite: oldTask.isFavorite,
                   isDone: false,
-                  date: DateTime.now().toString()
+                  isFavorite: oldTask.isFavorite,
+                  date: DateTime.now().toString(),
                 );
-                context.read<TasksBloc>().add(EditTask(oldTask: oldTask, newTask: editTask));
+                context.read<TasksBloc>().add(EditTask(
+                      oldTask: oldTask,
+                      newTask: editedTask,
+                    ));
                 Navigator.pop(context);
               },
-              child: const Text("Save")
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context), 
-              child: const Text("Cancelar"),
+              child: const Text('Save'),
             ),
           ],
         ),
