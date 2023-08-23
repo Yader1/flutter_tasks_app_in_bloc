@@ -17,7 +17,11 @@ class TaskTile extends StatelessWidget {
   void _removeOrDeleteTask(BuildContext ctx, Task task) {
     task.isDeleted!
         ? ctx.read<TasksBloc>().add(DeleteTask(task: task))
-        : ctx.read<TasksBloc>().add(RemoveTask(task: task));
+        : 
+        {
+          ctx.read<TasksBloc>().add(RemoveTask(task: task)),
+          ctx.read<TasksBloc>().add(GetAllTask())
+        };
   }
 
   void _editTask(BuildContext context) {
@@ -99,8 +103,10 @@ class TaskTile extends StatelessWidget {
                   Navigator.of(context).pop();
                   _editTask(context);
                 },
-                restoreTaskCallback: () =>
-                    context.read<TasksBloc>().add(RestoreTask(task: task)),
+                restoreTaskCallback: () =>{
+                  context.read<TasksBloc>().add(RestoreTask(task: task)),
+                  context.read<TasksBloc>().add(GetAllTask())
+                },
               ),
             ],
           ),

@@ -63,8 +63,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   }
 
-  void _onRemoveTask(RemoveTask event, Emitter<TasksState> emit) {
-
+  void _onRemoveTask(RemoveTask event, Emitter<TasksState> emit) async {
+    Task removedTask = event.task.copyWith(isDeleted: true);
+    await FirestoreRepository.update(task: removedTask);
   }
 
   void _onMarkFavoriteOrUnfavoriteTask(MarkFavoriteOrUnfavoriteTask event, Emitter<TasksState> emit) {
@@ -75,8 +76,14 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   }
 
-  void _onRestoreTask(RestoreTask event, Emitter<TasksState> emit) {
-
+  void _onRestoreTask(RestoreTask event, Emitter<TasksState> emit) async {
+    Task restoreTask = event.task.copyWith(
+      isDeleted: false, 
+      isDone: false,
+      isFavorite: false,
+      date: DateTime.now().toString()
+    );
+    await FirestoreRepository.update(task: restoreTask);
   }
 
   void _onDeleteAllTask(DeleteAllTasks event, Emitter<TasksState> emit) {
