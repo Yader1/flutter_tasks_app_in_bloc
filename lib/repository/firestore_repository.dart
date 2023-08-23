@@ -34,4 +34,14 @@ class FirestoreRepository {
       throw Exception(e.toString());
     }
   }
+
+  //update tasks
+  static Future<void> update({Task? task}) async {
+    try {
+      final data = await FirebaseFirestore.instance.collection(GetStorage().read('email'));
+      data.doc(task!.id).update(task.toMap());
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

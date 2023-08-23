@@ -84,6 +84,7 @@ class TaskTile extends StatelessWidget {
                 onChanged: task.isDeleted == false
                     ? (value) {
                         context.read<TasksBloc>().add(UpdateTask(task: task));
+                        context.read<TasksBloc>().add(GetAllTask());
                       }
                     : null,
               ),
