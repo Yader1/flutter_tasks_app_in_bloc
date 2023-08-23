@@ -58,6 +58,7 @@ class AddTaskScreen extends StatelessWidget {
                   date: DateTime.now().toString(),
                 );
                 context.read<TasksBloc>().add(AddTask(task: task));
+                context.read<TasksBloc>().add(GetAllTask());
                 Navigator.pop(context);
               },
               child: const Text('Add'),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tasks_app/blocs/bloc_exports.dart';
 import 'completed_tasks_screen.dart';
 import 'favorite_tasks_screen.dart';
 import 'my_drawer.dart';
@@ -22,6 +23,12 @@ class _TabsScreenState extends State<TabsScreen> {
   ];
 
   var _selectedPageIndex = 0;
+
+  @override
+  void initState() {
+    context.read<TasksBloc>().add(GetAllTask());
+    super.initState();
+  }
 
   void _addTask(BuildContext context) {
     showModalBottomSheet(

@@ -75,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     password: _passwordController.text
                   ).then((value){
                     GetStorage().write('token', value.user!.uid);
+                    GetStorage().write('email', value.user!.email);
                     Navigator.pushReplacementNamed(context, TabsScreen.id);
                   }).onError((error, stackTrace){
                     var snackBar = const SnackBar(
