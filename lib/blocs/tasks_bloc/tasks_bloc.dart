@@ -73,8 +73,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     await FirestoreRepository.update(task: task);
   }
 
-  void _onEditTask(EditTask event, Emitter<TasksState> emit) {
-
+  void _onEditTask(EditTask event, Emitter<TasksState> emit) async {
+    await FirestoreRepository.update(task: event.newTask);
   }
 
   void _onRestoreTask(RestoreTask event, Emitter<TasksState> emit) async {

@@ -65,9 +65,10 @@ class EditTaskScreen extends StatelessWidget {
                   date: DateTime.now().toString(),
                 );
                 context.read<TasksBloc>().add(EditTask(
-                      oldTask: oldTask,
-                      newTask: editedTask,
-                    ));
+                  //oldTask: oldTask,
+                  newTask: editedTask,
+                ));
+                context.read<TasksBloc>().add(GetAllTask());
                 Navigator.pop(context);
               },
               child: const Text('Save'),
