@@ -30,7 +30,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     List<Task> removedTask = [];
 
     await FirestoreRepository.get().then((value){
-      value.forEach((task) {
+      for (var task in value) {
         if(task.isDeleted == true){
           removedTask.add(task);
         } else {
@@ -43,7 +43,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             pendingTask.add(task);
           }
         }
-      });
+      }
     });
 
     emit(TasksState(
@@ -68,8 +68,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     await FirestoreRepository.update(task: removedTask);
   }
 
-  void _onMarkFavoriteOrUnfavoriteTask(MarkFavoriteOrUnfavoriteTask event, Emitter<TasksState> emit) {
-
+  void _onMarkFavoriteOrUnfavoriteTask(MarkFavoriteOrUnfavoriteTask event, Emitter<TasksState> emit) async {
+    Task task = event.task.copyWith(isFavorite: !event.task.isFavorite!);
+    await FirestoreRepository.update(task: task);
   }
 
   void _onEditTask(EditTask event, Emitter<TasksState> emit) {
